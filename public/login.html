@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>HKIS | Login</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+
+    <div class="middle-box text-center loginscreen animated fadeInDown">
+        <div>
+            <div class="text-center">
+                <h1 class="logo-name">HK</h1>
+            </div>
+            <h3>2015-16 Interim T-Shirts</h3>
+            <p>Design Submission Contest Application</p>
+            <p>Login with your HKIS credentials</p>
+            <form class="m-t" role="form" action="/api/v1/login" method="post">
+                <div class="form-group">
+                    <input type="text" name="email" class="form-control" placeholder="Username" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" name="password" class="form-control" placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn btn-primary block full-width m-b">Login</button>
+
+                <p class="text-muted text-center"><small>Login With your Student ID and School Password</small></p>
+            </form>
+            <p class="m-t"> <small>HS SDLT Contributors:</br>Sasha&nbsp;Varlamov, Hamlet&nbsp;Lin</small> </p>
+        </div>
+    </div>
+
+    <!-- Mainly scripts -->
+    <script src="js/jquery-2.1.1.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

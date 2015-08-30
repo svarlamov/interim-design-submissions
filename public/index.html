@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>HKIS | Submit</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <link href="http://webapplayers.com/inspinia_admin-v2.3/css/plugins/dropzone/basic.css" rel="stylesheet">
+    <link href="http://webapplayers.com/inspinia_admin-v2.3/css/plugins/dropzone/dropzone.css" rel="stylesheet">
+
+    <script>
+    function getCookie(name) {
+      var value = "; " + document.cookie;
+      var parts = value.split("; " + name + "=");
+      if (parts.length == 2) return parts.pop().split(";").shift();
+    }
+    if (!getCookie('session')) {
+        window.location.assign('/login.html');
+    }
+    </script>
+
+</head>
+
+<body>
+
+<div id="wrapper">
+    <nav class="navbar-default navbar-static-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav metismenu" id="side-menu">
+                <li class="nav-header">
+                    <div class="dropdown profile-element">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold" id="username"></strong>
+                             </span></span> </a>
+                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                                <li><a href="/api/v1/logout">Logout</a></li>
+                            </ul>
+                    </div>
+                </li>
+                <li class="active">
+                    <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">Submit</span></a>
+                </li>
+                <li>
+                    <a href="viewSubmission.html"><i class="fa fa-th-large"></i> <span class="nav-label">My Submissions</span> </a>
+                </li>
+            </ul>
+
+        </div>
+    </nav>
+
+    <div id="page-wrapper" class="gray-bg">
+        <div class="row border-bottom">
+            <nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0">
+                <div class="col-lg-10">
+                    <h2>Submit Your Designs</h2>
+                </div>
+                <ul class="nav navbar-top-links navbar-right">
+                    <li>
+                        <a href="/api/v1/logout">
+                            <i class="fa fa-sign-out"></i> Log out
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="wrapper wrapper-content animated fadeInRight">
+
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>Details Area</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <form action="/api/v1/designs" method="post" onsubmit="return validateFiles()" role="form">
+                                <div class="form-group">
+                                    <label>Description</label>
+                                    <input name="description" type="text" placeholder="Just a short excerpt" required class="form-control">
+                                </div>
+                                <input type="hidden" name="session" id="sessionField">
+                                <input type="hidden" name="rand" id="randField">
+                                <button type="submit" class="btn btn-primary">Submit all Required Materials</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>Dropzone Area</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <form id="dropzone" class="dropzone dz-clickable">
+                                <div class="dropzone-previews"></div>
+                            <div class="dz-default dz-message"><span>Drop files here to upload</span></div></form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <div>
+                <strong>HKIS HS HSDLT</strong>
+            </div>
+        </div>
+</div>
+
+<!-- Mainly scripts -->
+<script src="js/jquery-2.1.1.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+<script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+<!-- Custom and plugin javascript -->
+<script src="js/inspinia.js"></script>
+<script src="js/plugins/pace/pace.min.js"></script>
+<script src="js/dropzone.js"></script>
+
+<script>
+$('#username').html("Hello, " + getCookie("username"))
+var totalFiles = 0,
+    completeFiles = 0,
+    uploadFailures = 0;
+var rand = guid();
+document.getElementById("dropzone").action = '/api/v1/designs/upload?rand=' + rand;
+document.getElementById("randField").value = rand;
+function guid() {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+    s4() + '-' + s4() + s4() + s4();
+}
+
+Dropzone.options.dropzone = {
+    init: function () {
+        this.on("addedfile", function (file) {
+            totalFiles += 1;
+        });
+        this.on("removedfile", function (file) {
+            totalFiles -= 1;
+        });
+        this.on("complete", function (file) {
+            completeFiles += 1;
+        });
+        this.on("error", function(file) {
+            console.log("Caught file error");
+            uploadFailures += 1;
+        });
+    }
+};
+
+function validateFiles() {
+    if (uploadFailures > 0) {
+        alert(uploadFailures + " of your files failed to upload successfully. Please check your files, refresh and try again.");
+        return false;
+    }
+    if (completeFiles < 1) {
+        alert("You must upload at least one valid file before submitting.");
+        return false;
+    }
+    if (!(completeFiles === totalFiles)) {
+        alert((totalFiles - completeFiles) + " of your files is still uploading. Please wait.");
+        return false;
+    }
+    return true;
+}
+</script>
+
+</body>
+
+</html>
