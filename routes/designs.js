@@ -30,7 +30,7 @@ var mkdirSync = function (path) {
 router.get('/', function(req, res, next) {
     // TODO: Do not allow a full index on this field, require the interim key,
     //       and then present the designs for that interim
-    Design.find({}).populate('user').exec(function(err, designs) {
+    Design.find({}).populate('user trip').exec(function(err, designs) {
         if (err) {
             console.error(err);
             res.send(err);
@@ -164,7 +164,7 @@ router.post('/upload', function(req, res, next) {
 
 /* GET a user's design */
 router.get('/mine', function(req, res, next) {
-    Design.find({ user: req.currentUser }).populate('user').exec(function(err, design) {
+    Design.find({ user: req.currentUser }).populate('user trip').exec(function(err, design) {
         if (err) {
             console.error(err);
             res.send(err)

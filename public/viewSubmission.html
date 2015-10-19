@@ -86,7 +86,7 @@
                                 <th>ID</th>
                                 <th>Created At</th>
                                 <th>Updated At</th>
-                                <th>User Id</th>
+                                <th>Trip</th>
                                 <th>Description</th>
                             </tr>
                             </thead>
@@ -181,12 +181,10 @@ $.getJSON(reqPath + QueryString.designId, function(data) {
   }
   var details = [];
   $.each(data, function(key, val) {
-      console.log(key);
-      console.log(val);
     details.push("<tr>");
     details.push("<td>" + val._id + "</td>");
     details.push("<td>" + val.created_at + "</td>");
-    details.push("<td>" + val.updated_at + "</td>");
+    details.push("<td>" + val.trip.name + "</td>");
     details.push("<td>" + val.user.email + "</td>");
     details.push("<td>" + val.description + "</td>");
     details.push("</tr>");
