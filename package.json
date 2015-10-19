@@ -20,6 +20,7 @@
     "mongoose": "^4.0.3",
     "morgan": "~1.5.3",
     "multipart": "^0.1.5",
+    "needle": "^0.10.0",
     "posix": "^2.0.1",
     "serve-favicon": "~2.2.1",
     "uuid": "^2.0.1"

@@ -14,6 +14,8 @@
     <link href="css/animate.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
 
+    <link href="css/toastr.min.css" rel="stylesheet">
+
 </head>
 
 <body class="gray-bg">
@@ -44,6 +46,37 @@
     <!-- Mainly scripts -->
     <script src="js/jquery-2.1.1.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="http://webapplayers.com/inspinia_admin-v2.3/js/plugins/toastr/toastr.min.js"></script>
+    <script src="js/plugins/pace/pace.min.js"></script>
+    <script>
+    function getCookie(name) {
+        var value = "; " + document.cookie;
+        var parts = value.split("; " + name + "=");
+        if (parts.length == 2) return parts.pop().split(";").shift();
+    }
+    </script>
+    <script>
+    $(document).ready(function() {
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": false,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "0",
+            "hideDuration": "300",
+            "timeOut": "0",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+        toastr.error("Hello")
+    });
+    </script>
 
 </body>
 

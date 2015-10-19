@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var Session = require('./session');
+var hkis = require('../auth/hkis');
 
 var userSchema = new Schema({
   email: { type: String, unique: true, required: true },
@@ -11,7 +12,7 @@ var userSchema = new Schema({
 
 userSchema.pre('save', function(next) {
   var currentDate = new Date();
-  
+
   this.updated_at = currentDate;
 
   if (!this.created_at)
@@ -21,10 +22,16 @@ userSchema.pre('save', function(next) {
 });
 
 userSchema.methods.authenticate = function authUser(email, password, callback) {
-    // TODO: authenticate user based on auth method, and then create the session
-    var session = new Session({ user: this });
-    session.save();
-    callback(null, session);
+    user = this
+    hkis(email, password, function(ok) {
+        if (ok) {
+            var session = new Session({ user: user });
+            session.save();
+            callback(null, session);
+        } else {
+            callback(null, null);
+        }
+    });
 };
 
 userSchema.methods.isLoggedIn = function checkLoggedIn(){
