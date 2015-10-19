@@ -28,7 +28,7 @@ var mkdirSync = function (path) {
 
 /* GET all designs */
 router.get('/', function(req, res, next) {
-    if (!req.query.key || isValidObjectID(req.query.key)) {
+    if (!req.query.key) {
         res.send("Invalid key");
         return;
     }
