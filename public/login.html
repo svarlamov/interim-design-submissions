@@ -54,6 +54,9 @@
         var parts = value.split("; " + name + "=");
         if (parts.length == 2) return parts.pop().split(";").shift();
     }
+    function deleteCookie(name) {
+        document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    };
     </script>
     <script>
     $(document).ready(function() {
@@ -74,8 +77,9 @@
             "showMethod": "fadeIn",
             "hideMethod": "fadeOut"
         }
-        if getCookie('auth_failed') {
+        if (getCookie('auth_failed')) {
             toastr.error(getCookie('auth_failed'))
+            deleteCookie('auth_failed')
         }
     });
     </script>
