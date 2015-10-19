@@ -74,7 +74,9 @@
             "showMethod": "fadeIn",
             "hideMethod": "fadeOut"
         }
-        toastr.error("Hello")
+        if getCookie('auth_failed') {
+            toastr.error(getCookie('auth_failed'))
+        }
     });
     </script>
 

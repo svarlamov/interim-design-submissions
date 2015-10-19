@@ -29,6 +29,7 @@ router.post('/', function(req, res, next) {
                         if (!session){
                             // The user is unauthorized
                             res.status(401);
+                            res.cookie('auth_failed', 'We could not log you in. Please check your username and password.')
                             res.redirect('back')
                         } else {
                             // Authentication Succeeded
@@ -50,6 +51,7 @@ router.post('/', function(req, res, next) {
                         if (!session){
                             // The user is unauthorized
                             res.status(401);
+                            res.cookie('auth_failed', 'We could not log you in. Please check your username and password.')
                             res.redirect('back');
                         } else {
                             // Authentication Succeeded
