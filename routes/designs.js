@@ -99,6 +99,9 @@ router.post('/', function(req, res, next) {
                         return;
                     }
                 });
+            } else {
+                res.json({ success: false, message: "Invalid `trip` parameter" });
+                return;
             }
         });
 
