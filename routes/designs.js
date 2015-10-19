@@ -52,6 +52,7 @@ router.post('/', function(req, res, next) {
     } else {
         req.body.rand = String(req.body.rand)
     }
+    var trip = null
     if (req.body.trip == undefined || req.body.trip.length < 1) {
         res.json({ success: false, message: "Missing `trip` parameter" });
         return
@@ -62,7 +63,7 @@ router.post('/', function(req, res, next) {
                 return
             }
             if (t) {
-                req.body.trip = t;
+                trip = t
                 return
             }
         });
@@ -92,7 +93,7 @@ router.post('/', function(req, res, next) {
                 source.on('error', function(err) { throw err });
             }
         }
-        var design = new Design({ user: req.currentUser, trip: req.body.trip, description: req.body.description, files: files, s3: useS3 });
+        var design = new Design({ user: req.currentUser, trip: trip, description: req.body.description, files: files, s3: useS3 });
         design.save();
         res.redirect('back')
     });
