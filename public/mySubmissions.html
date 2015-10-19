@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>HKIS | Submit</title>
+    <title>HKIS | My Submissions</title>
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
@@ -23,7 +23,7 @@
       var parts = value.split("; " + name + "=");
       if (parts.length == 2) return parts.pop().split(";").shift();
     }
-    if (!getCookie('session')) {
+    if (!getCookie('session') || !getCookie('username')) {
         window.location.assign('/login.html');
     }
     </script>
@@ -46,7 +46,7 @@
                             </ul>
                     </div>
                 </li>
-                <li class="active">
+                <li>
                     <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">Submit</span></a>
                 </li>
                 <li>
@@ -61,7 +61,7 @@
         <div class="row border-bottom">
             <nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0">
                 <div class="col-lg-10">
-                    <h2>Submit Your Designs</h2>
+                    <h2>My Submissions</h2>
                 </div>
                 <ul class="nav navbar-top-links navbar-right">
                     <li>
@@ -73,39 +73,24 @@
             </nav>
         </div>
         <div class="wrapper wrapper-content animated fadeInRight">
-
             <div class="row">
-                <div class="col-lg-4">
+                <div class="col-lg-12">
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
-                            <h5>Details Area</h5>
+                            <h5>Details</h5>
                         </div>
                         <div class="ibox-content">
-                            <form action="/api/v1/designs" method="post" onsubmit="return validateFiles()" role="form">
-                                <div class="form-group">
-                                    <label>Trip Name</label>
-                                    <input name="trip" type="text" placeholder="The name of the interim" required class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label>Description</label>
-                                    <input name="description" type="text" placeholder="Just a short excerpt" required class="form-control">
-                                </div>
-                                <input type="hidden" name="session" id="sessionField">
-                                <input type="hidden" name="rand" id="randField">
-                                <button type="submit" class="btn btn-primary">Submit all Required Materials</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-8">
-                    <div class="ibox float-e-margins">
-                        <div class="ibox-title">
-                            <h5>Dropzone Area</h5>
-                        </div>
-                        <div class="ibox-content">
-                            <form id="dropzone" class="dropzone dz-clickable">
-                                <div class="dropzone-previews"></div>
-                            <div class="dz-default dz-message"><span>Drop files here to upload</span></div></form>
+                            <table class="table" id="designDetails">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Created At</th>
+                                <th>Updated At</th>
+                                <th>User Id</th>
+                                <th>Description</th>
+                            </tr>
+                            </thead>
+                        </table>
                         </div>
                     </div>
                 </div>
@@ -113,7 +98,7 @@
         </div>
         <div class="footer">
             <div>
-                <strong>HKIS HS HSDLT</strong>
+                <strong>HKIS HS SDLT</strong>
             </div>
         </div>
 </div>
@@ -131,55 +116,32 @@
 
 <script>
 $('#username').html("Hello, " + getCookie("username"))
-var totalFiles = 0,
-    completeFiles = 0,
-    uploadFailures = 0;
-var rand = guid();
-document.getElementById("dropzone").action = '/api/v1/designs/upload?rand=' + rand;
-document.getElementById("randField").value = rand;
-function guid() {
-  function s4() {
-    return Math.floor((1 + Math.random()) * 0x10000)
-      .toString(16)
-      .substring(1);
-  }
-  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-    s4() + '-' + s4() + s4() + s4();
-}
+var reqPath = "api/v1/designs/mine";
+$.getJSON(reqPath, function(data) {
+  var details = [];
+  $.each(data, function(key, val) {
+    details.push("<tr>");
+    details.push('<td><a href="/viewSubmission.html?designId=' + val._id + '">' + val._id + '</a>' + "</td>");
+    details.push("<td>" + val.created_at + "</td>");
+    details.push("<td>" + val.updated_at + "</td>");
+    details.push("<td>" + val.user.email + "</td>");
+    details.push("<td>" + val.description + "</td>");
+    details.push("</tr>");
+  });
 
-Dropzone.options.dropzone = {
-    init: function () {
-        this.on("addedfile", function (file) {
-            totalFiles += 1;
-        });
-        this.on("removedfile", function (file) {
-            totalFiles -= 1;
-        });
-        this.on("complete", function (file) {
-            completeFiles += 1;
-        });
-        this.on("error", function(file) {
-            console.log("Caught file error");
-            uploadFailures += 1;
-        });
-    }
-};
-
-function validateFiles() {
-    if (uploadFailures > 0) {
-        alert(uploadFailures + " of your files failed to upload successfully. Please check your files, refresh and try again.");
-        return false;
-    }
-    if (completeFiles < 1) {
-        alert("You must upload at least one valid file before submitting.");
-        return false;
-    }
-    if (!(completeFiles === totalFiles)) {
-        alert((totalFiles - completeFiles) + " of your files is still uploading. Please wait.");
-        return false;
-    }
-    return true;
-}
+  $("<tbody/>", {
+    "class": "",
+    html: details.join( "" )
+  }).appendTo("#designDetails");
+  var images = [];
+  $.each(data[0].files, function (ind, fn) {
+      images.push( '<img alt="image" class="img-responsive" src="/api/v1/designs/'+ data[0]._id + '/' + fn + '">');
+  });
+  $("<div/>", {
+    "class": "carousel-inner",
+    html: images.join( "" )
+  }).appendTo("#carousel");
+});
 </script>
 
 <script>

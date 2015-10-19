@@ -180,7 +180,7 @@ router.get('/mine', function(req, res, next) {
 
 /* GET a design */
 router.get('/:design_id', function(req, res, next) {
-    Design.find({ _id: req.params.design_id }).populate('user').exec(function(err, design) {
+    Design.find({ _id: req.params.design_id }).populate('user trip').exec(function(err, design) {
         if (err) {
             console.error(err);
             res.send(err)

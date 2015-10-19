@@ -50,7 +50,7 @@
                     <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">Submit</span></a>
                 </li>
                 <li class="active">
-                    <a href="viewSubmission.html"><i class="fa fa-th-large"></i> <span class="nav-label">My Submissions</span> </a>
+                    <a href="mySubmissions.html"><i class="fa fa-th-large"></i> <span class="nav-label">My Submissions</span> </a>
                 </li>
             </ul>
 
@@ -159,12 +159,6 @@ var QueryString = function () {
 <script>
 $('#username').html("Hello, " + getCookie("username"))
 var reqPath = "api/v1/designs/";
-if (QueryString.designId === undefined) {
-    reqPath += "mine";
-    QueryString.designId = "";
-} else {
-    console.log(QueryString.designId)
-}
 $.getJSON(reqPath + QueryString.designId, function(data) {
   if (data.message != undefined) {
       var items = [ data.message ];
