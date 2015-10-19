@@ -57,6 +57,9 @@
     function deleteCookie(name) {
         document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     };
+    function replaceAll(string, find, replace) {
+        return string.replace(new RegExp(escapeRegExp(find), 'g'), replace);
+    }
     </script>
     <script>
     $(document).ready(function() {
@@ -78,7 +81,7 @@
             "hideMethod": "fadeOut"
         }
         if (getCookie('auth_failed')) {
-            toastr.error(getCookie('auth_failed'))
+            toastr.error(replaceAll(getCookie('auth_failed'), "%20", " "))
             deleteCookie('auth_failed')
         }
     });
