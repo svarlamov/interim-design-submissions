@@ -36,16 +36,31 @@ router.get('/', function(req, res, next) {
         res.send("Invalid name parameter");
         return;
     }
-    Design.find({ _id: req.query.key, name: req.query.name }).sort({ created_at: 'desc' }).populate('user trip').exec(function(err, designs) {
+    Trip.findOne({ _id: req.query.key, name: req.query.name }, function(err, trip) {
         if (err) {
             console.error(err);
             res.send(err);
             return;
         }
-        if (designs && designs.length > 0) {
-            res.json(designs);
+        if (trip) {
+            Design.find({ trip: trip }).sort({ created_at: 'desc' }).populate('user').exec(function(err, designs) {
+                if (err) {
+                    console.error(err);
+                    res.send(err);
+                    return;
+                }
+                if (designs && designs.length > 0) {
+                    for (var i = 0; i < designs.length; i++) {
+                        designs.trip = { name: req.query.name }
+                    }
+                    res.json(designs);
+                } else {
+                    res.json({});
+                }
+            });
         } else {
-            res.json({});
+            res.send("Invalid trip parameters");
+            return;
         }
     });
 });
