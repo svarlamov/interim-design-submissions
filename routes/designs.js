@@ -55,17 +55,6 @@ router.post('/', function(req, res, next) {
     if (req.body.trip == undefined || req.body.trip.length < 1) {
         res.json({ success: false, message: "Missing `trip` parameter" });
         return;
-    } else {
-        Trip.findOne({ name: req.body.trip }).exec(function(err, t) {
-            if (err) {
-                res.json({ success: false, message: "Invalid `trip` parameter" });
-                return;
-            }
-            if (t) {
-                req.body.trip = t;
-                return;
-            }
-        });
     }
     fs.readdir(__dirname.replace('routes', '') + 'uploads/' + req.body.rand, function(err, files) {
         if (files === undefined) {
@@ -92,10 +81,27 @@ router.post('/', function(req, res, next) {
                 source.on('error', function(err) { throw err });
             }
         }
-        console.log("Trip: " + req.body.trip)
-        var design = new Design({ user: req.currentUser, trip: req.body.trip, description: req.body.description, files: files, s3: useS3 });
-        design.save();
-        res.redirect('back')
+        Trip.findOne({ name: req.body.trip }).exec(function(err, t) {
+            if (err) {
+                res.json({ success: false, message: "Invalid `trip` parameter" });
+                return;
+            }
+            if (t) {
+                var design = new Design({ user: req.currentUser, trip: t, description: req.body.description, files: files, s3: useS3 });
+                design.save(function(err, obj) {
+                    if (err) {
+                        res.json({ success: false, message: "An error occured saving your design" });
+                        console.log(err);
+                        return;
+                    } else {
+                        // TODO: Send to the view my submissions page?
+                        res.redirect('back');
+                        return;
+                    }
+                });
+            }
+        });
+
     });
 });
 
