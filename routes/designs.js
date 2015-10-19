@@ -28,7 +28,7 @@ var mkdirSync = function (path) {
 
 /* GET all designs */
 router.get('/', function(req, res, next) {
-    if (!req.query.key || !mongoose.Types.ObjectId.isValid(req.query.key)) {
+    if (!req.query.key || !req.query.key /^[0-9a-fA-F]{24}$/) {
         res.send("Invalid key");
         return;
     }
