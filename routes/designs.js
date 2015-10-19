@@ -32,11 +32,11 @@ router.get('/', function(req, res, next) {
         res.send("Invalid key");
         return;
     }
-    if (!req.query.name || req.query.name.length < 1) {
+    if (!req.query.tripName || req.query.tripName.length < 1) {
         res.send("Invalid name parameter");
         return;
     }
-    Trip.findOne({ _id: req.query.key, name: req.query.name }, function(err, trip) {
+    Trip.findOne({ _id: req.query.key, name: req.query.tripName }, function(err, trip) {
         if (err) {
             console.error(err);
             res.send(err);
@@ -51,7 +51,7 @@ router.get('/', function(req, res, next) {
                 }
                 if (designs && designs.length > 0) {
                     for (var i = 0; i < designs.length; i++) {
-                        designs.trip = { name: req.query.name }
+                        designs.trip = { name: req.query.tripName }
                     }
                     res.json(designs);
                 } else {
