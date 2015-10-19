@@ -83,6 +83,10 @@
                         <div class="ibox-content">
                             <form action="/api/v1/designs" method="post" onsubmit="return validateFiles()" role="form">
                                 <div class="form-group">
+                                    <label>Trip Name</label>
+                                    <input name="trip" type="text" placeholder="The name of the interim" required class="form-control">
+                                </div>
+                                <div class="form-group">
                                     <label>Description</label>
                                     <input name="description" type="text" placeholder="Just a short excerpt" required class="form-control">
                                 </div>

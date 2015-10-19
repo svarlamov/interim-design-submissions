@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var fs = require('fs');
 var config = require('../config');
 var useS3 = config.s3_enabled;
+var Trip = require('./trip');
 if(useS3) {
   var AWS = require('aws-sdk');
   AWS.config = new AWS.Config();
@@ -14,6 +15,7 @@ var Schema = mongoose.Schema;
 
 var designSchema = new Schema({
   user: { type: mongoose.Schema.ObjectId, ref: 'User', required: true },
+  trip: { type: mongoose.Schema.ObjectId, ref: 'Trip', required: true },
   description: { type: String, required: true},
   files: [{ type: String, required: true }],
   s3: { type: Boolean, required: true },

@@ -15,6 +15,7 @@ var uuid = require('uuid');
 var gm = require('gm');
 var Design = require('../models/design');
 var User = require('../models/user');
+var Trip = require('../models/trip');
 var router = express.Router({mergeParams : true});
 
 var mkdirSync = function (path) {
@@ -27,6 +28,8 @@ var mkdirSync = function (path) {
 
 /* GET all designs */
 router.get('/', function(req, res, next) {
+    // TODO: Do not allow a full index on this field, require the interim key,
+    //       and then present the designs for that interim
     Design.find({}).populate('user').exec(function(err, designs) {
         if (err) {
             console.error(err);
@@ -44,10 +47,25 @@ router.post('/', function(req, res, next) {
         return
     }
     if (req.body.rand === undefined) {
-        res.json({ success: false, message: 'Missing `rand` parameter.'})
+        res.json({ success: false, message: 'Missing `rand` parameter.'});
         return
     } else {
         req.body.rand = String(req.body.rand)
+    }
+    if (req.body.trip == undefined || req.body.trip.length < 1) {
+        res.json({ success: false, message: "Missing `trip` parameter" });
+        return
+    } else {
+        Trip.findOne({ name: req.body.trip }).exec(function(err, t) {
+            if (err) {
+                res.json({ success: false, message: "Invalid `trip` parameter" });
+                return
+            }
+            if (t) {
+                req.body.trip = t;
+                return
+            }
+        });
     }
     fs.readdir(__dirname.replace('routes', '') + 'uploads/' + req.body.rand, function(err, files) {
         if (files === undefined) {
@@ -74,7 +92,7 @@ router.post('/', function(req, res, next) {
                 source.on('error', function(err) { throw err });
             }
         }
-        var design = new Design({ user: req.currentUser, description: req.body.description, files: files, s3: useS3 });
+        var design = new Design({ user: req.currentUser, trip: req.body.trip, description: req.body.description, files: files, s3: useS3 });
         design.save();
         res.redirect('back')
     });
