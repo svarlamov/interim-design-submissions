@@ -81,10 +81,9 @@
                             <h5>Details Area</h5>
                         </div>
                         <div class="ibox-content">
-                            <form action="/api/v1/designs" method="post" onsubmit="return validateFiles()" role="form">
-                                <div class="form-group">
+                            <form action="/api/v1/designs" id="designForm" method="post" onsubmit="return validateFiles()" role="form">
+                                <div class="form-group" id="tripSelectionDiv">
                                     <label>Trip Name</label>
-                                    <input name="trip" type="text" placeholder="The name of the interim" required class="form-control">
                                 </div>
                                 <div class="form-group">
                                     <label>Description</label>
@@ -178,8 +177,31 @@ function validateFiles() {
         alert((totalFiles - completeFiles) + " of your files is still uploading. Please wait.");
         return false;
     }
+    if ($('#tripSelector').find(":selected").text() == "Please Choose a Trip") {
+        alert("You must choose a trip before submitting.");
+        return false
+    }
     return true;
 }
+</script>
+
+<script>
+    var reqPath = "api/v1/trips";
+    $.getJSON(reqPath, function(data) {
+      var trips = [];
+      trips.push('<option val="_default">Please Choose a Trip</option>')
+      $.each(data, function(key, val) {
+        trips.push('<option val="' + val.name + '">' + val.name + '</option>');
+      });
+
+      $("<select/>", {
+        "form": "designForm",
+        "id": "tripSelector",
+        "class": "form-control",
+        "name": "trip",
+        html: trips.join("")
+    }).appendTo("#tripSelectionDiv");
+    });
 </script>
 
 <script>

@@ -35,8 +35,8 @@ router.post('/', function(req, res, next) {
                             // Authentication Succeeded
                             // Save the user, since we know he's legit
                             newUser.save();
-                            res.cookie('session', session._id, { maxAge: 900000, httpOnly: false });
-                            res.cookie('username', session.user.email, { maxAge: 900000, httpOnly: false });
+                            res.cookie('session', session._id, { httpOnly: false });
+                            res.cookie('username', session.user.email, { httpOnly: false });
                             res.redirect('/index.html')
                         }
                     }
@@ -55,8 +55,8 @@ router.post('/', function(req, res, next) {
                             res.redirect('back');
                         } else {
                             // Authentication Succeeded
-                            res.cookie('session', session._id, { maxAge: 900000, httpOnly: false });
-                            res.cookie('username', session.user.email, { maxAge: 900000, httpOnly: false });
+                            res.cookie('session', session._id, { httpOnly: false });
+                            res.cookie('username', session.user.email, { httpOnly: false });
                             res.redirect('/index.html')
                         }
                     }

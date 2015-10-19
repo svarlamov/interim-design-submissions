@@ -28,15 +28,25 @@ var mkdirSync = function (path) {
 
 /* GET all designs */
 router.get('/', function(req, res, next) {
-    // TODO: Do not allow a full index on this field, require the interim key,
-    //       and then present the designs for that interim
-    Design.find({}).populate('user trip').exec(function(err, designs) {
+    if (!req.query.key || !mongoose.Types.ObjectId.isValid(req.query.key)) {
+        res.send("Invalid key");
+        return;
+    }
+    if (!req.query.name || req.query.name.length < 1) {
+        res.send("Invalid name parameter");
+        return;
+    }
+    Design.find({ _id: req.query.key, name: req.query.name }).sort({ created_at: 'desc' }).populate('user trip').exec(function(err, designs) {
         if (err) {
             console.error(err);
             res.send(err);
             return;
         }
-        res.json(designs);
+        if (designs && designs.length > 0) {
+            res.json(designs);
+        } else {
+            res.json({});
+        }
     });
 });
 
@@ -94,8 +104,7 @@ router.post('/', function(req, res, next) {
                         console.log(err);
                         return;
                     } else {
-                        // TODO: Send to the view my submissions page?
-                        res.redirect('back');
+                        res.redirect('/mySubmissions.html');
                         return;
                     }
                 });
@@ -164,7 +173,7 @@ router.post('/upload', function(req, res, next) {
 
 /* GET a user's design */
 router.get('/mine', function(req, res, next) {
-    Design.find({ user: req.currentUser }).populate('user trip').exec(function(err, design) {
+    Design.find({ user: req.currentUser }).sort({ created_at: 'desc' }).populate('user trip').exec(function(err, design) {
         if (err) {
             console.error(err);
             res.send(err)

@@ -12,13 +12,14 @@ var User = require('./models/user');
 var Session = require('./models/session');
 
 var routes = require('./routes/index');
-var designs = require('./routes/designs')
+var designs = require('./routes/designs');
+var trips = require('./routes/trips');
 var loginCtrlr = require('./routes/login');
 var logoutCtrlr = require('./routes/logout');
 
 var app = express();
 mongoose.connection.on('error', function(err) {
-    console.error('MongoDB error: %s', err);
+    console.error('MongoDB Error: %s', err);
 });
 mongoose.connect('mongodb://localhost/interim_designs_development');
 
@@ -103,6 +104,8 @@ app.use('/', routes);
 app.use('/api/v1/login', loginCtrlr);
 // API Designs
 app.use('/api/v1/designs', designs)
+// API Trips
+app.use('/api/v1/trips', trips)
 // API Logout
 app.use('/api/v1/logout', logoutCtrlr);
 
