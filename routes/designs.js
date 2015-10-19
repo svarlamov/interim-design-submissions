@@ -52,19 +52,18 @@ router.post('/', function(req, res, next) {
     } else {
         req.body.rand = String(req.body.rand)
     }
-    var trip = null
     if (req.body.trip == undefined || req.body.trip.length < 1) {
         res.json({ success: false, message: "Missing `trip` parameter" });
-        return
+        return;
     } else {
         Trip.findOne({ name: req.body.trip }).exec(function(err, t) {
             if (err) {
                 res.json({ success: false, message: "Invalid `trip` parameter" });
-                return
+                return;
             }
             if (t) {
-                trip = t
-                return
+                req.body.trip = t;
+                return;
             }
         });
     }
@@ -93,7 +92,8 @@ router.post('/', function(req, res, next) {
                 source.on('error', function(err) { throw err });
             }
         }
-        var design = new Design({ user: req.currentUser, trip: trip, description: req.body.description, files: files, s3: useS3 });
+        console.log("Trip: " + req.body.trip)
+        var design = new Design({ user: req.currentUser, trip: req.body.trip, description: req.body.description, files: files, s3: useS3 });
         design.save();
         res.redirect('back')
     });
