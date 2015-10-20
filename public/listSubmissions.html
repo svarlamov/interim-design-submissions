@@ -149,7 +149,7 @@ $.getJSON(reqPath, function(data) {
     details.push('<td><a href="/viewSubmission.html?designId=' + val._id + '">' + val._id + '</a>' + "</td>");
     details.push("<td>" + val.user.email + "</td>");
     details.push("<td>" + val.description + "</td>");
-    details.push("<td>" + val.trip.name + "</td>");
+    details.push("<td>" + val.trip + "</td>");
     details.push("<td>" + val.created_at + "</td>");
     details.push("</tr>");
   });
