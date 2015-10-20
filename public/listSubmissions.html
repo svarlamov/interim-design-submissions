@@ -75,7 +75,7 @@
                     <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">Submit</span></a>
                 </li>
                 <li>
-                    <a href="viewSubmission.html"><i class="fa fa-th-large"></i> <span class="nav-label">My Submissions</span> </a>
+                    <a href="mySubmissions.html"><i class="fa fa-th-large"></i> <span class="nav-label">My Submissions</span> </a>
                 </li>
             </ul>
 
@@ -109,10 +109,10 @@
                             <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Created At</th>
-                                <th>Updated At</th>
-                                <th>User Id</th>
+                                <th>User ID</th>
                                 <th>Description</th>
+                                <th>Trip</th>
+                                <th>Submitted At</th>
                             </tr>
                             </thead>
                         </table>
@@ -147,10 +147,10 @@ $.getJSON(reqPath, function(data) {
   $.each(data, function(key, val) {
     details.push("<tr>");
     details.push('<td><a href="/viewSubmission.html?designId=' + val._id + '">' + val._id + '</a>' + "</td>");
-    details.push("<td>" + val.created_at + "</td>");
-    details.push("<td>" + val.updated_at + "</td>");
     details.push("<td>" + val.user.email + "</td>");
     details.push("<td>" + val.description + "</td>");
+    details.push("<td>" + val.trip.name + "</td>");
+    details.push("<td>" + val.created_at + "</td>");
     details.push("</tr>");
   });
 
