@@ -43,16 +43,13 @@ router.get('/', function(req, res, next) {
             return;
         }
         if (trip) {
-            Design.find({ trip: trip }).sort({ created_at: 'desc' }).populate('user').exec(function(err, designs) {
+            Design.find({ trip: trip }).sort({ created_at: 'desc' }).populate('user trip').exec(function(err, designs) {
                 if (err) {
                     console.error(err);
                     res.send(err);
                     return;
                 }
                 if (designs && designs.length > 0) {
-                    for (var i = 0; i < designs.length; i++) {
-                        designs.trip = { name: req.query.tripName }
-                    }
                     res.json(designs);
                 } else {
                     res.json({});
