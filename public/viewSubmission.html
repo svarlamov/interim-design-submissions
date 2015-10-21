@@ -94,21 +94,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-12" id="carousel-container">
-                    <div class="ibox float-e-margins" id="carousel-big-box">
-                        <div class="ibox-title" id="carousel-title">
-                            <h5>Attachments</h5>
-                        </div>
-                        <div class="ibox-content" id="carousel-box">
-                            <div class="carousel slide" id="carousel">
-                                <a data-slide="prev" href="#carousel1" class="left carousel-control">
-                                    <span class="icon-prev"></span>
-                                </a>
-                                <a data-slide="next" href="#carousel1" class="right carousel-control">
-                                    <span class="icon-next"></span>
-                                </a>
-                            </div>
-                        </div>
+                <div class="col-lg-12">
+                    <div class="tabs-container" id="tabsContainer">
                     </div>
                 </div>
             </div>
@@ -157,45 +144,72 @@ var QueryString = function () {
 </script>
 
 <script>
+function isFilePreviewable(fileName) {
+    var fileNameLowerCase = fileName.toLowerCase();
+
+    if (fileNameLowerCase.indexOf('.wav') >= 0) return true;
+    else if (fileNameLowerCase.indexOf('.ogg') >= 0) return true;
+    else if (fileNameLowerCase.indexOf('.webm') >= 0) return true;
+    else if (fileNameLowerCase.indexOf('.mp4') >= 0) return true;
+    else if (fileNameLowerCase.indexOf('.jpg') >= 0) return true;
+    else if (fileNameLowerCase.indexOf('.jpeg') >= 0) return true;
+    else if (fileNameLowerCase.indexOf('.gif') >= 0) return true;
+    else if (fileNameLowerCase.indexOf('.bmp') >= 0) return true;
+    else if (fileNameLowerCase.indexOf('.png') >= 0) return true;
+    else { return false }
+}
+
 $('#username').html("Hello, " + getCookie("username"))
 var reqPath = "api/v1/designs/";
 $.getJSON(reqPath + QueryString.designId, function(data) {
-  if (data.message != undefined) {
-      var items = [ data.message ];
-      $( "<ul/>", {
-        "class": "list",
-        html: items.join( "" )
-      }).appendTo("#designDetails");
-      $("#carousel-box").remove();
-      $("#carousel").remove();
-      $("#carousel-title").remove();
-      $("#carousel-big-box").remove();
-      $("#carousel-container").remove();
-      return
-  }
   var details = [];
   $.each(data, function(key, val) {
     details.push("<tr>");
     details.push("<td>" + val._id + "</td>");
-    details.push("<td>" + val.created_at + "</td>");
-    details.push("<td>" + val.trip.name + "</td>");
     details.push("<td>" + val.user.email + "</td>");
     details.push("<td>" + val.description + "</td>");
+    details.push("<td>" + val.trip.name + "</td>");
+    details.push("<td>" + val.created_at + "</td>");
     details.push("</tr>");
   });
-
   $("<tbody/>", {
     "class": "",
-    html: details.join( "" )
+    html: details.join("")
   }).appendTo("#designDetails");
-  var images = [];
-  $.each(data[0].files, function (ind, fn) {
-      images.push( '<img alt="image" class="img-responsive" src="/api/v1/designs/'+ data[0]._id + '/' + fn + '">');
-  });
+
+  var tabs = [];
+  var tabContents = [];
+  for (var i = 0; i < data[0].files.length; i++) {
+      if (i == 0) {
+          tabs.push('<li class="active">');
+      } else {
+          tabs.push('<li class="">');
+      }
+      tabs.push('<a data-toggle="tab" href="#tab-' + i + '">' + 'Attachment #' + (i+1) + '</a>');
+      tabs.push('</li>');
+      if (i == 0) {
+          tabContents.push('<div id="tab-' + i + '" class="tab-pane active">');
+      } else {
+          tabContents.push('<div id="tab-' + i + '" class="tab-pane">');
+      }
+      tabContents.push('<div class="panel-body">');
+      tabContents.push('<a target="_blank" href="/api/v1/designs/'+ data[0]._id + '/' + data[0].files[i] + '">' + 'Download File' + '</a>');
+      if (isFilePreviewable(data[0].files[i])) {
+          tabContents.push('<img alt="image" class="img-responsive" src="/api/v1/designs/'+ data[0]._id + '/' + data[0].files[i] + '">');
+      } else {
+          tabContents.push('<div>No Preview Available</div>')
+      }
+      tabContents.push('</div>');
+      tabContents.push('</div>');
+  }
+  $("<ul/>", {
+    "class": "nav nav-tabs",
+    html: tabs.join("")
+  }).appendTo("#tabsContainer");
   $("<div/>", {
-    "class": "carousel-inner",
-    html: images.join( "" )
-  }).appendTo("#carousel");
+    "class": "tab-content",
+    html: tabContents.join("")
+  }).appendTo("#tabsContainer");
 });
 </script>
 

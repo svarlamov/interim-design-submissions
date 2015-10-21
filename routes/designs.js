@@ -89,6 +89,18 @@ router.post('/', function(req, res, next) {
             res.send("You must upload at least one valid file");
             return;
         }
+        cntValidImages = 0;
+        for (var j = 0; j < files.length; j++) {
+            if (shouldBeImageFile(files[j])) {
+                cntValidImages++;
+                break;
+            }
+        }
+        if (cntValidImages == 0) {
+            res.status(400);
+            res.send("You must upload at least one valid IMAGE file, alongside any other attachments");
+            return;
+        }
         for (var i = 0; i < files.length; i++) {
             if (useS3) {
                 uploadFileToS3(files[i], __dirname.replace('routes', '') + 'uploads/' + req.body.rand + '/' + files[i], function() {
@@ -148,6 +160,12 @@ router.post('/upload', function(req, res, next) {
         fstream = fs.createWriteStream(__dirname.replace('routes', '') + 'uploads/' + req.query.rand + '/' + fn + extension);
         file.pipe(fstream);
         fstream.on('close', function () {
+            if (!shouldBeImageFile(filename)) {
+                // Non-image files are okay, we just have to verify that there
+                // exists at least one valid image at the time of submission :)
+                res.redirect('back');
+                return;
+            }
             gm(__dirname.replace('routes', '') + 'uploads/' + req.query.rand + '/' + fn + extension).size(function(err, value) {
                 if (err) {
                     if (err.message.indexOf('No decode delegate') > -1){
@@ -252,6 +270,15 @@ function uploadFileToS3(remoteFilename, fileName, callback) {
   });
 }
 
+function shouldBeImageFile(fileName) {
+    var fileNameLowerCase = fileName.toLowerCase();
+    if (fileNameLowerCase.indexOf('.jpg') >= 0) return true
+    else if (fileNameLowerCase.indexOf('.jpeg') >= 0) return true
+    else if (fileNameLowerCase.indexOf('.gif') >= 0) return true
+    else if (fileNameLowerCase.indexOf('.bmp') >= 0) return true
+    else if (fileNameLowerCase.indexOf('.png') >= 0) return true
+    else return false
+}
 
 function getContentTypeByFile(fileName) {
   var rc = 'application/octet-stream';

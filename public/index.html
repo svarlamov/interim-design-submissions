@@ -132,6 +132,7 @@
 $('#username').html("Hello, " + getCookie("username"))
 var totalFiles = 0,
     completeFiles = 0,
+    completedFileNames = [],
     uploadFailures = 0;
 var rand = guid();
 document.getElementById("dropzone").action = '/api/v1/designs/upload?rand=' + rand;
@@ -156,13 +157,23 @@ Dropzone.options.dropzone = {
         });
         this.on("complete", function (file) {
             completeFiles += 1;
+            completedFileNames.push(file.name)
         });
         this.on("error", function(file) {
-            console.log("Caught file error");
             uploadFailures += 1;
         });
     }
 };
+
+function shouldBeImageFile(fileName) {
+    var fileNameLowerCase = fileName.toLowerCase();
+    if (fileNameLowerCase.indexOf('.jpg') >= 0) return true
+    else if (fileNameLowerCase.indexOf('.jpeg') >= 0) return true
+    else if (fileNameLowerCase.indexOf('.gif') >= 0) return true
+    else if (fileNameLowerCase.indexOf('.bmp') >= 0) return true
+    else if (fileNameLowerCase.indexOf('.png') >= 0) return true
+    else return false
+}
 
 function validateFiles() {
     if (uploadFailures > 0) {
@@ -179,6 +190,17 @@ function validateFiles() {
     }
     if ($('#tripSelector').find(":selected").text() == "Please Choose a Trip") {
         alert("You must choose a trip before submitting.");
+        return false
+    }
+    cntValidImages = 0;
+    for (var j = 0; j < completedFileNames.length; j++) {
+        if (shouldBeImageFile(completedFileNames[j])) {
+            cntValidImages++;
+            break;
+        }
+    }
+    if (cntValidImages == 0) {
+        alert("You must upload at least one valid image file, alongside any other non-image files.");
         return false
     }
     return true;

@@ -133,14 +133,6 @@ $.getJSON(reqPath, function(data) {
     "class": "",
     html: details.join( "" )
   }).appendTo("#designDetails");
-  var images = [];
-  $.each(data[0].files, function (ind, fn) {
-      images.push( '<img alt="image" class="img-responsive" src="/api/v1/designs/'+ data[0]._id + '/' + fn + '">');
-  });
-  $("<div/>", {
-    "class": "carousel-inner",
-    html: images.join( "" )
-  }).appendTo("#carousel");
 });
 </script>
 
