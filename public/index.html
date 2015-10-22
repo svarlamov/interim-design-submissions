@@ -12,7 +12,7 @@
     <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
 
     <link href="css/animate.css" rel="stylesheet">
-    
+
     <link href="css/plugins/dropzone/basic.css" rel="stylesheet">
     <link href="css/plugins/dropzone/dropzone.css" rel="stylesheet">
 
@@ -170,8 +170,6 @@ function shouldBeImageFile(fileName) {
     var fileNameLowerCase = fileName.toLowerCase();
     if (fileNameLowerCase.indexOf('.jpg') >= 0) return true
     else if (fileNameLowerCase.indexOf('.jpeg') >= 0) return true
-    else if (fileNameLowerCase.indexOf('.gif') >= 0) return true
-    else if (fileNameLowerCase.indexOf('.bmp') >= 0) return true
     else if (fileNameLowerCase.indexOf('.png') >= 0) return true
     else return false
 }

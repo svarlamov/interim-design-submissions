@@ -274,8 +274,6 @@ function shouldBeImageFile(fileName) {
     var fileNameLowerCase = fileName.toLowerCase();
     if (fileNameLowerCase.indexOf('.jpg') >= 0) return true
     else if (fileNameLowerCase.indexOf('.jpeg') >= 0) return true
-    else if (fileNameLowerCase.indexOf('.gif') >= 0) return true
-    else if (fileNameLowerCase.indexOf('.bmp') >= 0) return true
     else if (fileNameLowerCase.indexOf('.png') >= 0) return true
     else return false
 }
@@ -293,6 +291,8 @@ function getContentTypeByFile(fileName) {
   else if (fileNameLowerCase.indexOf('.gif') >= 0) rc = 'image/gif';
   else if (fileNameLowerCase.indexOf('.bmp') >= 0) rc = 'image/bmp';
   else if (fileNameLowerCase.indexOf('.png') >= 0) rc = 'image/png';
+  else if (fileNameLowerCase.indexOf('.pdf') >= 0) rc = 'application/pdf';
+  else if (fileNameLowerCase.indexOf('.ai') >= 0) rc = 'application/illustrator';
 
   return rc;
 }
