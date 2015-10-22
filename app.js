@@ -21,7 +21,7 @@ var app = express();
 mongoose.connection.on('error', function(err) {
     console.error('MongoDB Error: %s', err);
 });
-mongoose.connect('mongodb://localhost/interim_designs_development');
+mongoose.connect('mongodb://localhost/interim_designs_production');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

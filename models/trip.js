@@ -20,7 +20,4 @@ tripSchema.pre('save', function(next) {
 
 var Trip = mongoose.model('Trip', tripSchema);
 
-var testTrip = new Trip({ name: 'test' });
-testTrip.save();
-
 module.exports = Trip;
