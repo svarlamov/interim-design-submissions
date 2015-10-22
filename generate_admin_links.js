@@ -16,6 +16,6 @@ Trip.find({}, function(err, trips) {
         for (var i = 0; i < trips.length; i++) {
             tripAdminLinks.push(encodeURI("interim.bitwisehacks.com/listSubmissions.html?key=" + trips[i]._id + "&tripName=" + trips[i].name));
         }
-        fs.writeFile('./admin_links.json', JSON.stringify(obj, null, 2) , 'utf-8');
+        fs.writeFile('./admin_links.json', JSON.stringify(tripAdminLinks, null, 2) , 'utf-8');
     }
 });
