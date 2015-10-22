@@ -104,7 +104,7 @@ router.post('/', function(req, res, next) {
         for (var i = 0; i < files.length; i++) {
             if (useS3) {
                 uploadFileToS3(files[i], __dirname.replace('routes', '') + 'uploads/' + req.body.rand + '/' + files[i], function() {
-                    fs.unlink(__dirname.replace('routes', '') + 'uploads/' + design.file);
+                    fs.unlink(__dirname.replace('routes', '') + 'uploads/' + files[i]);
                 });
             } else {
                 var source = fs.createReadStream(__dirname.replace('routes', '') + 'uploads/' + req.body.rand + '/' + files[i]);
