@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Trip = require('./models/trip');
+var fs = require('fs')
 
 mongoose.connection.on('error', function(err) {
     console.error('MongoDB Error: %s', err);
