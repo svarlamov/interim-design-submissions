@@ -57,8 +57,8 @@ Trip.remove({}, function(err) {
     }
 });
 
-for (var i = 0; i < trip.length; i++) {
-    var t = new Trip({ name: trip[i] })
+for (var i = 0; i < trips.length; i++) {
+    var t = new Trip({ name: trips[i] })
     t.save(function(err, result) {
         if (err) {
             console.error("Error saving an interim trip: " + err)
