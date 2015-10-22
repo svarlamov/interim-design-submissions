@@ -151,16 +151,44 @@ function guid() {
 Dropzone.options.dropzone = {
     init: function () {
         this.on("addedfile", function (file) {
+            ga('send', {
+              hitType: 'event',
+              eventCategory: 'Files',
+              eventAction: 'upload',
+              eventLabel: 'File Added',
+              eventValue: 2
+            });
             totalFiles += 1;
         });
         this.on("removedfile", function (file) {
+            ga('send', {
+              hitType: 'event',
+              eventCategory: 'Files',
+              eventAction: 'upload',
+              eventLabel: 'File Removed',
+              eventValue: 3
+            });
             totalFiles -= 1;
         });
         this.on("complete", function (file) {
+            ga('send', {
+              hitType: 'event',
+              eventCategory: 'Files',
+              eventAction: 'upload',
+              eventLabel: 'Successful Upload',
+              eventValue: 0
+          });
             completeFiles += 1;
             completedFileNames.push(file.name)
         });
         this.on("error", function(file) {
+            ga('send', {
+              hitType: 'event',
+              eventCategory: 'Files',
+              eventAction: 'upload',
+              eventLabel: 'Failed Upload',
+              eventValue: 1,
+            });
             uploadFailures += 1;
         });
     }

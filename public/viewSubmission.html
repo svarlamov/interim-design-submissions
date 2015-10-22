@@ -161,6 +161,15 @@ function isFilePreviewable(fileName) {
 
 $('#username').html("Hello, " + getCookie("username"))
 var reqPath = "api/v1/designs/";
+if (!QueryString.designId || !QueryString.designId.length > 1) {
+    window.location.assign('/mySubmissions.html');
+}
+ga('send', {
+  hitType: 'event',
+  eventCategory: 'Submissions',
+  eventAction: 'viewsub',
+  eventLabel: 'Viewing Submission with id, ' + QueryString.designId
+});
 $.getJSON(reqPath + QueryString.designId, function(data) {
   var details = [];
   $.each(data, function(key, val) {

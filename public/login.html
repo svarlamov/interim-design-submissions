@@ -28,7 +28,7 @@
             <h3>2015-16 Interim T-Shirts</h3>
             <p>Design Submission Contest Application</p>
             <p>Login with your HKIS credentials</p>
-            <form class="m-t" role="form" action="/api/v1/login" method="post">
+            <form class="m-t" role="form" action="/api/v1/login" method="post" onsubmit="return logSigninAttempt()">
                 <div class="form-group">
                     <input type="text" name="email" class="form-control" placeholder="Username" required>
                 </div>
@@ -63,6 +63,16 @@
     function replaceAll(string, find, replace) {
         return string.replace(new RegExp(escapeRegExp(find), 'g'), replace);
     }
+    function logSigninAttempt() {
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'Login',
+          eventAction: 'login',
+          eventLabel: 'Login Attempt',
+          eventValue: 0
+        });
+        return true
+    }
     </script>
     <script>
     $(document).ready(function() {
@@ -86,6 +96,13 @@
         if (getCookie('auth_failed')) {
             toastr.error(replaceAll(getCookie('auth_failed'), "%20", " "))
             deleteCookie('auth_failed')
+            ga('send', {
+              hitType: 'event',
+              eventCategory: 'Login',
+              eventAction: 'login',
+              eventLabel: 'Login Failed',
+              eventValue: 1
+            });
         }
     });
     </script>
