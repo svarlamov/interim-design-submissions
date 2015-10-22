@@ -187,12 +187,12 @@ router.post('/upload', function(req, res, next) {
                     fs.unlink(__dirname.replace('routes', '') + 'uploads/' + req.query.rand + '/' + fn + extension);
                     return;
                 }
-                if (value.width > 200 && value.height > 200) {
+                if ((value.height > 4960 && value.width > 3507) || (value.width > 4960 && value.height > 3507)) {
                     res.redirect('back');
                     return;
                 } else {
                     res.status(400);
-                    res.send('The image must be at least 200px by 200px');
+                    res.send('The image must be at least 4960 by 3507 pixels. Your image is only ' + value.height + ' pixels by ' + value.width + '.');
                     fs.unlink(__dirname.replace('routes', '') + 'uploads/' + req.query.rand + '/' + fn + extension);
                     return;
                 }
