@@ -60,6 +60,7 @@ Trip.remove({}, function(err) {
         for (var i = 0; i < trips.length; i++) {
             var t = new Trip({ name: trips[i] });
             t.save(function(err, result) {
+		        console.log("Saved: " + result)
                 if (err) {
                     console.error("Error saving an interim trip: " + err);
                 } else {
@@ -67,7 +68,6 @@ Trip.remove({}, function(err) {
                 }
             });
         }
-        while (cnt > 0) { }
         console.log("Finished adding " + cnt + " trips to the database.")
     }
 });
