@@ -1,3 +1,4 @@
+var mongoose = require('mongoose');
 var Trip = require('./models/trip');
 
 var trips = [
