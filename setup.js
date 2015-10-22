@@ -53,16 +53,21 @@ mongoose.connect('mongodb://localhost/interim_designs_production');
 
 Trip.remove({}, function(err) {
     if (err) {
-        console.error("Error removing all existing trip records: " + err)
+        console.error("Error removing all existing trip records: " + err);
     } else {
-        console.log("Removed all trip records")
+        console.log("Removed all trip records");
+        var cnt = trips.length
         for (var i = 0; i < trips.length; i++) {
-            var t = new Trip({ name: trips[i] })
+            var t = new Trip({ name: trips[i] });
             t.save(function(err, result) {
                 if (err) {
-                    console.error("Error saving an interim trip: " + err)
+                    console.error("Error saving an interim trip: " + err);
+                } else {
+                    cnt--;
                 }
             });
         }
+        while (cnt > 0) { }
+        console.log("Finished adding " + cnt + " trips to the database.")
     }
 });
