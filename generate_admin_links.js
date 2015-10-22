@@ -13,7 +13,7 @@ Trip.find({}, function(err, trips) {
     } else if (trips) {
         var tripAdminLinks = []
         for (var i = 0; i < trips.length; i++) {
-            tripAdminLinks.push(encodeURI("interim.bitwisehacks.com/listSubmissions.html?key=" + trip._id + "&tripName=" + trip.name));
+            tripAdminLinks.push(encodeURI("interim.bitwisehacks.com/listSubmissions.html?key=" + trips[i]._id + "&tripName=" + trips[i].name));
         }
         fs.writeFile('./admin_links.json', JSON.stringify(obj, null, 2) , 'utf-8');
     }
